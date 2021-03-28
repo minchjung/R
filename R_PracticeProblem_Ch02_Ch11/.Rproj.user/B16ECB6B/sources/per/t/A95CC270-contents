@@ -1,0 +1,271 @@
+#ch3 연습문제 
+#1. 
+  #단계1
+tit = Titanic
+getwd()
+write.csv(file="titanic.csv",tit)
+  #단계2
+titanicData <- read.csv(file="titanic.csv")
+str(titanicData)
+  #단계3 
+titanicData=titanicData[-c(1,3)]
+head(titanicData)
+
+#2. 
+  #단계1
+CO2
+head(CO2)
+data1<-subset(CO2,Treatment=='nonchilled')
+write.csv(file="CO2_df1.csv",data1)
+  #단계2
+data2<-subset(CO2,Treatment=='chilled')
+write.csv(file="CO2_df2.csv",data2)
+
+#ch4. 연습문제 
+#1. 
+  #조건1
+name<-c("유관순","홍길동","이순신","신사임당")
+gender<-c("F","M","M","F")
+price<-c(50,65,45,75)
+client<-data.frame(name,gender,price)
+  #조건2
+client$result<-ifelse(client$price>=65,"Best","Normal")
+client
+  #조건3
+freq<-table(client$result)
+freq
+
+#2.
+
+EMP<-c("2014홍길동220","2002이순신300","2010유관순260")
+emp_pay<-function(x){
+  for (i in 1:3){
+    library(stringr)
+    names[i]<-str_extract('[가-힣]{3}',x[i])
+    }
+  return(names)
+}
+names <-emp_pay(EMP)
+names
+
+#3. 
+mean_ratio_change<-function(x1,x2){
+  y1 =x1^3 +4
+  y2 =x2^3 +4
+  
+  deltaY=y2-y1
+  deltaX=x2-x1
+  ans=deltaY/deltaX
+  return(ans)
+}
+
+answer<-mean_ratio_change(1,3)
+answer
+
+#4. 
+install.packages("RSADBE")
+library(RSADBE)
+data("Bug_Metrics_Software")
+head(Bug_Metrics_Software)
+rowSums(Bug_Metrics_Software[ , , 1])
+colMeans(Bug_Metrics_Software[ , , 1])
+summary(Bug_Metrics_Software[, , 1])
+
+#ch5.
+#1.
+  #조건1
+attributes(iris3)
+str(iris3)
+  #조건2
+head(iris3)
+  #조건3
+plot(iris3, main="iris3 전체 데이터 셋의 분포현황")
+#2. 
+  #조건1 
+head(iris)
+plot(iris[,1],iris[,3])
+  #조건2
+plot(iris[,1],iris[,3],col=iris[,5])
+  #조건3
+title(main="iris 데이터 테이블 산포도 차트")
+  #조건4
+library(ggplot2)
+getwd()
+p<-gglot(iris,aes(iris[,1],iris[,3],color=iris[,5])) +geom_point()
+p<-p+ggtitle("iris 데이터 테이블 산포토 차트")
+p
+ggsave(file="iris.jpg",width=7,height=4,units=c("cm"))
+
+#ch6.
+#1.
+library(dplyr)
+
+head(iris)
+f1<-iris%>%filter(Petal.Length>=1.5)
+f1
+#2.
+f2<-f1%>%select(1,3,5)
+f2
+#3.
+f3<-f2%>%mutate(diff=f2[,1]-f2[,2]) #문제오류 1번열과 2번열 차이
+f3
+#4.
+f4<-f3%>%group_by(Species)
+f4_summarise<-f4%>%summarise(mean(Sepal.Length),mean(Petal.Length))
+f4_summarise
+#5
+library(reshape2)
+iris
+long<-melt(iris,id="Species",variable.name = "LW", value.name = "Values")
+head(long)
+sum<-dcast(long,Species~LW,value.var = "Values",margins=TRUE,fun.aggregate=sum)
+sum
+
+#ch7
+#1.
+dataset<-read.csv("dataset.csv",header=T)
+head(dataset)
+dataset2<-subset(dataset,price >=2 & price<=8)
+dataset2$positin2[dataset2$position==1]<-'5급'
+dataset2$positin2[dataset2$position==2]<-'4급'
+dataset2$positin2[dataset2$position==3]<-'3급'
+dataset2$positin2[dataset2$position==4]<-'2급'
+dataset2$positin2[dataset2$position==5]<-'1급'
+head(dataset2)
+#2.
+resident2<-subset(dataset2,!is.na(dataset2$resident))
+resident2
+#3.
+dataset2$gender2[dataset2$gender==1]<-"남자"
+dataset2$gender2[dataset2$gender==2]<-"여자"
+dataset2
+#4.
+dataset2$age1[dataset2$age<=30]<-"1"
+dataset2$age2[dataset2$age>=30 & dataset2$age<=55]<-"2"
+dataset2$age3[dataset2$age>=55]<-"3"
+dataset2$age1
+dataset2$age2
+dataset2$age3
+dataset2[c('age','age2','age3')]
+#5.
+write.csv(file="cleanData.csv",dataset2,quote=F, row.names =F)
+new_data<-read.csv(file="cleanData.csv")
+new_data
+#6.
+userdata<-read.csv(file="user_data.csv",header=T)
+returndata<-read.csv(file="return_data.csv",header=T)
+head(userdata)
+head(returndata)
+  #조건1.
+userid<-returndata%>%select(1)
+class(userid)
+#7.
+
+
+#ch8.
+#1.
+  # 조건1
+library(lattice)
+quakes
+depthgroup <- equal.count(quakes$depth, number = 3, overlap = 0)
+depthgroup
+  #조건2
+maggroup<- equal.count(quakes$mag,number=2,overlap=0)
+maggroup
+  #조건3 
+xyplot(lat~long|depthgroup*maggroup, data = quakes,layout=c(2,3))
+#2.
+install.packages("latticeExtra")
+library(latticeExtra)
+head(SeatacWeather)
+str(SeatacWeather)
+xyplot(min.temp+max.temp~month,data=SeatacWeather,type='l')
+
+#3.
+diamonds
+str(diamonds)
+head(diamonds)
+p<-ggplot(diamonds,aes(carat,price,colour=clarity))+geom_point()
+p<-p+geom_smooth()
+p
+
+#4.
+install.packages("ggmap")
+library(ggmap)
+  # 조건1
+seoul <- c(left = 126.77, bottom = 37.40, 
+           right = 127.17, top = 37.70)
+map <- get_stamenmap(seoul, zoom = 11, maptype = 'watercolor')
+  #조건2
+getwd()
+pop <- read.csv("university.csv", header = T)
+str(pop)
+  #조건3
+LON <- pop$LON
+LAT <- pop$LAT
+  #조건4
+school <- pop$'학교명'
+df <- data.frame(school, LON, LAT)
+  #조건5
+layer1 <- ggmap(map)
+layer1
+
+
+layer2 <- layer1 + geom_point(data = df, 
+                              aes(x = LON, y = LAT,
+                                  color = factor(school), 
+                                  size = factor(school)))
+layer2
+
+layer3 <- layer2 + geom_text(data = df,
+                             aes(x =LON-0.01, y = LAT-0.01, 
+                                 label=school))
+layer3
+ggsave("pop201901.png", scale = 1, width = 10.24, height = 7.68)
+
+
+#ch9.
+#1.
+install.packages("rJava")
+install.packages("DBI")
+install.packages("RJDBC")
+library(DBI)
+Sys.setenv(JAVA_HOME = "C:\\Program Files\\Java\\jdk-15.0.1\\bin")
+library(rJava)
+library(RJDBC)
+getwd()
+drv <- JDBC("oracle.jdbc.driver.OracleDriver",
+            "C:\\oraclexe\\app\\oracle\\product\\11.2.0\\server\\jdbc\\lib\\ojdbc6_g.jar")
+
+conn <- dbConnect(drv,
+                  "jdbc:oracle:thin:@//127.0.0.1:1521/xe", "scott", "tiger")
+
+# 단계1
+query = "create table GoodsInfo(
+proCode char(5) primary key,
+proName varchar(30) not null,
+price number(8) not null,
+maker varchar(25) not null
+)
+"
+dbSendUpdate(conn, query)
+
+# 단계2
+query="insert into GoodsInfo values(1001,'냉장고',1800000,SM)"
+query="insert into GoodsInfo values('1002','세탁기','500000',LN)"
+query="insert into GoodsInfo values('1003','HDTV','2500000',HP)"
+dbSendUpdate(conn, query)
+# 단계3
+query="SELECT * FROM GoodsInfo"
+dbGetQuery(conn,query)
+
+#2.
+library(KoNLP)
+install.packages("KoNLP")
+detach("package:rJava")
+detach("package:RJDBC")
+library(tm)
+library(wordcloud)
+
+public_data<-read.csv(file="publicCorona.csv",header=F)
+public_data
