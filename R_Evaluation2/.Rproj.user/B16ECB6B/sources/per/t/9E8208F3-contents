@@ -1,0 +1,65 @@
+# 2 
+rivers
+str(rivers)
+head(rivers)
+rivers
+
+res<-hist(rivers,col ='skyblue',border='navy',breaks=8)
+res
+
+# 3
+install.packages("dplyr")
+library(ggplot2)
+library(dplyr)
+getwd()
+magazine<-read.csv(file="magazine.csv", header = T)
+magazine<-data.frame(magazine)
+str(magazine)
+
+year2017<-filter(magazine,구분==2017)
+year2016<-filter(magazine,구분==2016)
+
+ggplot(magazine,aes(x=시,소설, y=year2017))+geom_bar()
+
+
+# 4 
+library(lattice)
+trees
+str(trees)
+head(trees)
+g<-ggplot(trees,aes(x=Girth)) + geom_histogram(fill="cyan",colour="black")
+h<-ggplot(trees,aes(x=Height)) + geom_histogram(fill="cyan",colour="black")
+v<-ggplot(trees,aes(x=Volume))+ geom_histogram(fill="cyan",colour="black")
+
+
+g<-qplot(Girth,data=trees)
+h<-qplot(Height,data=trees)
+v<-qplot(Volume,data=trees)
+grid.arrange(g,h,v, nrow=1, ncol=3)
+
+# 5 
+install.packages("gridExtra")
+library(gridExtra)
+# (1)
+ds<-diamonds
+head(diamonds)
+
+#(2)
+
+#(3)
+p<-ggplot(ds, aes(cut))+geom_bar(fill='pink')+ggtitle("Quality of the cut")+theme(
+  plot.margin = unit(c(3, 6, 3, 3), "cm"))
+)
+p
+#(4)
+p<-p+theme(
+  plot.margin = unit(c(0,0,0,0), "cm")
+)
+p           
+#(5)
+p_depth<-ggplot(ds,aes(depth))+geom_bar(fill="wheat")
+p_depth<-p_depth + xlab("percentage")
+p_depth
+
+#(6)
+grid.arrange(p,p_depth, nrow=2, ncol=1)
